@@ -225,21 +225,21 @@ async def test_mixed_positional_args_mistake(fixtures):
 
 @pytest.mark.asyncio
 async def test_nesting_transactions_rollback(fixtures):
-    id = None
-    id2 = None
+    user_id = None
+    user_id2 = None
     async with fixtures.transaction() as tr1:
-        id = await fixtures.insert_user(username="little_bug")
+        user_id = await fixtures.insert_user(username="little_bug")
         async with fixtures.transaction() as tr2:
             result = await fixtures.user_for_id(user_id=1)
             assert {"username": "mcfunley", "user_id": 1} == result
-            id2 = await fixtures.insert_user(username="little_bug2")
+            user_id2 = await fixtures.insert_user(username="little_bug2")
             await tr2.commit()
         await tr1.rollback()
 
-    result = await fixtures.user_for_id(user_id=id)
-    assert result != {"username": "little_bug", "user_id": id}
-    result2 = await fixtures.user_for_id(user_id=id2)
-    assert result2 != {"username": "little_bug2", "user_id": id2}
+    result = await fixtures.user_for_id(user_id=user_id)
+    assert result != {"username": "little_bug", "user_id": user_id}
+    result2 = await fixtures.user_for_id(user_id=user_id2)
+    assert result2 != {"username": "little_bug2", "user_id": user_id2}
 
 
 @pytest.mark.asyncio
