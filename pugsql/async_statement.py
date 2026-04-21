@@ -2,8 +2,6 @@
 Async compiled SQL function objects.
 """
 
-from contextvars import ContextVar
-from contextlib import contextmanager
 from typing import TYPE_CHECKING, Optional
 
 import sqlalchemy
